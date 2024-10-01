@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+    <script src="https://gateway2.blinkpayment.co.uk/sdk/web/v1/js/hostedfields.min.js"></script>
+    <script src="./custom.js"></script>
+    <link rel="stylesheet" href="https://secure.blinkpayment.co.uk/assets/css/api.css">
+    <style class="hostedfield">
+        .hostedfield {
+            font-family: Arial;
+        }
+        body {
+          text-align: center;
+        }
+         /* Make the text look like a button */
+         .copy-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 16px;
+            text-align: center;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            position: relative;
+        }
+
+        /* Change background color on hover */
+        .copy-btn:hover {
+            background-color: #45a049;
+        }
+
+        /* Tooltip that will be shown on hover, hidden by default */
+        .tooltip {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            white-space: nowrap;
+            background-color: #fff;
+            color: black;
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            /* display: none; */
+        }
+    </style>
+    <title>Card Details</title>
+</head>
+<body>
+    <form action="./" method="post" id="Paymentform">
+        <input type="hidden" class="blink-form__input--merchantID" name="merchantID" value="233508">
+        <div class="relative mb-4 blink-form__group fieldgroup-container no-wrap"> <input type="hostedfield:cardNumber"
+            class="blink-form__input--card-number" placeholder="1234 1234 1234 1234" /> <input
+            type="hostedfield:cardExpiryDate" class="blink-form__input--card-expiry" placeholder="MM/YY" /> <input
+            type="hostedfield:cardCVV" class="blink-form__input--card-cvv" placeholder="CVV" /> 
+        </div>
+         <br>
+        <input type="submit" value="" >
+    </form>
+
+    <div id="paymentTokenResult"></div>
+    <div class="tooltip" id="tokenTooltip"></div>
+    <!-- A message to show copy success -->
+<p id="copySuccess" style="display: none; color: green;">Copied!</p>
+</body>
+<script>
+    let paymentToken = null;
+    if(paymentToken) {
+     document.getElementById("paymentTokenResult").innerHTML = `Payment token succesuflly Made <br> <span class="copy-btn" id="copyText">Copy Payment Token</span>`;
+     // Function to copy text to clipboard
+ 
+
+           // Get the button and tooltip elements
+    const copyTextBtn = document.getElementById('copyText');
+    const tokenTooltip = document.getElementById('tokenTooltip');
+    const copySuccess = document.getElementById('copySuccess');
+
+    // Show the token in the tooltip on hover
+    copyTextBtn.addEventListener('mouseover', () => {
+        tokenTooltip.innerText = paymentToken; // Set the dynamic token value
+        tokenTooltip.style.display = 'block';  // Show the tooltip
+    });
+
+    // Hide the tooltip when not hovering
+    copyTextBtn.addEventListener('mouseout', () => {
+        tokenTooltip.style.display = 'none';  // Hide the tooltip
+    });
+
+    // Copy the token to the clipboard when the button is clicked
+    copyTextBtn.addEventListener('click', function () {
+        // Create a temporary textarea element to hold the token
+        const tempTextarea = document.createElement('textarea');
+        tempTextarea.value = paymentToken;
+
+        // Append it to the body and select the text
+        document.body.appendChild(tempTextarea);
+        tempTextarea.select();
+        tempTextarea.setSelectionRange(0, 99999); // For mobile devices
+
+        // Copy the text to the clipboard
+        document.execCommand('copy');
+
+        // Remove the temporary textarea
+        document.body.removeChild(tempTextarea);
+
+        // Show a success message
+        copySuccess.style.display = 'block';
+        setTimeout(() => copySuccess.style.display = 'none', 2000);
+    });
+       
+    }
+
+     
+</script>
+</html>
